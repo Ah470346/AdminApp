@@ -21,6 +21,7 @@ function ModalChangePassword({
         handleSubmit,
         control,
         setError,
+        reset,
         formState: { errors },
     } = useForm<formData>({
         defaultValues: {
@@ -68,6 +69,12 @@ function ModalChangePassword({
                                 content: 'Change Password successful!',
                                 key: 'success',
                                 duration: 5,
+                            });
+                            reset({
+                                username: '',
+                                password: '',
+                                newPassword: '',
+                                confirmPassword: '',
                             });
                             setVisible(false);
                         }
@@ -148,13 +155,21 @@ function ModalChangePassword({
         <Modal
             title="CHANGE PASSWORD"
             visible={visible}
-            onCancel={() => onCancel(enable)}
+            onCancel={() => {
+                reset({
+                    username: '',
+                    password: '',
+                    newPassword: '',
+                    confirmPassword: '',
+                });
+                onCancel(enable);
+            }}
             centered
             className="non-border-top modal"
             footer={false}
         >
-            <section className="wrap-change-pass" key={visible}>
-                <form onSubmit={handleSubmit(onSubmit)}>
+            <section className="wrap-change-pass">
+                <form className="form" onSubmit={handleSubmit(onSubmit)}>
                     <Controller
                         {...{
                             control,

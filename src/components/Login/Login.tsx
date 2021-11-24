@@ -13,7 +13,6 @@ function Login(props: any) {
     const dispatch = useAppDispatch();
     const setPersistCookie = (status: boolean) => dispatch(setPersist(status));
     const onPage = (page: string) => dispatch(setPage(page));
-    const [emptyForm, setEmptyForm] = useState(false);
     const onLogin = (user: FormData) => dispatch(postAuth(user));
     const [visible, setVisible] = useState<boolean>(false);
     const login = (e: any) => {
@@ -122,7 +121,6 @@ function Login(props: any) {
             <ModalChangePassword
                 visible={visible}
                 setVisible={setVisible}
-                key={visible}
             ></ModalChangePassword>
         </div>
     );
