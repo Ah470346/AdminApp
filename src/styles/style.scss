@@ -1,0 +1,70 @@
+@import './mixins';
+@import './variables';
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: $fontFamily;
+    color: white;
+    font-weight: 300;
+    line-height: 21px;
+    font-size: 1em;
+
+    h1 {
+        color: white;
+    }
+
+    ::-webkit-input-placeholder {
+        /* WebKit browsers */
+        font-family: $fontFamily;
+        color: white;
+        font-weight: 300;
+    }
+    :-moz-placeholder {
+        /* Mozilla Firefox 4 to 18 */
+        font-family: $fontFamily;
+        color: white;
+        opacity: 1;
+        font-weight: 300;
+    }
+    ::-moz-placeholder {
+        /* Mozilla Firefox 19+ */
+        font-family: $fontFamily;
+        color: white;
+        opacity: 1;
+        font-weight: 300;
+    }
+    :-ms-input-placeholder {
+        /* Internet Explorer 10+ */
+        font-family: $fontFamily;
+        color: white;
+        font-weight: 300;
+    }
+    p {
+        margin: 0;
+    }
+
+    .ant-message-notice-content {
+        & > div {
+            & > span:last-child {
+                color: black;
+                font-weight: 600 !important;
+            }
+        }
+    }
+
+    .ant-notification-notice-content {
+        color: black;
+        font-weight: 600 !important;
+    }
+
+    .ant-spin.ant-spin-spinning {
+        max-height: 100%;
+    }
+}
+
+@import '../components/Main';

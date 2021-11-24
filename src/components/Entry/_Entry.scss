@@ -1,0 +1,122 @@
+.wrap-entry {
+    padding: 2em;
+
+    .entry {
+        @include flexBox(row, center, center);
+        width: 100%;
+        height: 100%;
+        .wrap-image {
+            position: relative;
+            width: 65%;
+            height: 100%;
+            background: transparent;
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid #999999;
+            box-shadow: 5px 5px 10px rgba($color: #000000, $alpha: 0.2);
+
+            .tools {
+                @include flexBox(row, space-between, center);
+                position: absolute;
+                z-index: 2;
+                width: 150px;
+                height: 30px;
+
+                & button {
+                    @include flexBox(row, center, center);
+                    width: 48px;
+                    height: 100%;
+                    font-size: 1.2em;
+                    line-height: 1.4em;
+                    font-weight: 600;
+                    opacity: 1;
+                    transform: scale(1);
+                    border: none;
+                    outline: none;
+                    border-radius: 3px;
+                    background-color: $colorBlueAnt;
+                    transition: all ease-in-out 0.3s;
+                }
+
+                & button:hover {
+                    opacity: 0.7;
+                }
+
+                & button:active {
+                    transform: scale(1.3);
+                }
+
+                & button:last-child {
+                    background-color: #ff4d4f;
+                }
+            }
+            .react-transform-wrapper {
+                margin: 0;
+                width: 100%;
+                height: 100%;
+
+                // .react-transform-component {
+                //     margin-left: 50%;
+                //     margin-right: 50%;
+                //     transform: translate(-50%, -50%);
+                // }
+                .image {
+                }
+            }
+        }
+        .wrap-input {
+            padding: 10px 20px 0px 20px;
+            width: 35%;
+            height: 100%;
+            @include flexBox(column, flex-start, center);
+
+            & .title {
+                position: relative;
+                width: 85%;
+                margin-bottom: 20px;
+                border-radius: 5px;
+                box-shadow: 0px 0px 5px rgba($color: #000000, $alpha: 0.5);
+                color: black;
+                padding: 9px 20px;
+                font-weight: bold;
+                font-size: 1.1em;
+                @include flexBox(row, flex-start, center);
+
+                p {
+                    margin: 0;
+                    .name {
+                        color: $colorBlueAnt;
+                    }
+                }
+            }
+
+            textarea {
+                height: auto;
+                max-height: 80%;
+                color: #000000;
+                font-size: 1.1em;
+                font-weight: bold;
+                line-height: 1.8em;
+                letter-spacing: 0.05em;
+                word-spacing: 0.15em;
+            }
+
+            & .submit {
+                margin-top: 20px;
+                width: 100%;
+                @include flexBox(row, flex-end);
+                button {
+                    height: 40px;
+                    width: 100px;
+                    font-weight: bold !important;
+                    font-size: 1em;
+                }
+            }
+        }
+        .empty {
+            color: #bebdbd;
+            font-weight: 600;
+            @include absoluteCenter('both');
+        }
+    }
+}
