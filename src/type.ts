@@ -4,7 +4,7 @@ import refreshTokenApi from './api/refreshTokenApi';
 
 const cookie = new Cookies();
 
-export type FormData = {
+export type formData = {
     username: string;
     password: string;
     newPassword: string;

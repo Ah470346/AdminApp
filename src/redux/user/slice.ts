@@ -1,3 +1,4 @@
+import { message } from 'antd';
 import { createReducer, createAsyncThunk } from '@reduxjs/toolkit';
 import getUserApi from '../../api/getUserApi';
 import { checkToken, refresh } from '../../type';
@@ -7,12 +8,14 @@ interface user {
     loading: boolean;
     data: object;
     error: null | string;
+    changePassword: string;
 }
 
 const initialState: user = {
     loading: false,
     data: {},
     error: null,
+    changePassword: '',
 };
 
 export const getUser = createAsyncThunk(
@@ -49,6 +52,26 @@ export const getUser = createAsyncThunk(
     }
 );
 
+export const changePassword = createAsyncThunk(
+    'user/changePassword',
+    async (user: FormData, { rejectWithValue }) => {
+        try {
+            const response: any = await getUserApi.changePassword(user);
+            return response.message;
+        } catch (err: any) {
+            console.log(err);
+
+            if (err.response.status === 500) {
+                return rejectWithValue('Server is disconnected!');
+            } else {
+                return rejectWithValue(err.response.data.message);
+            }
+            // Use `err.response.data` as `action.payload` for a `rejected` action,
+            // by explicitly returning it using the `rejectWithValue()` utility
+        }
+    }
+);
+
 const userReducer = createReducer(initialState, {
     [getUser.pending.type]: (state, action) => {
         state.loading = true;
@@ -58,6 +81,17 @@ const userReducer = createReducer(initialState, {
         state.data = action.payload;
     },
     [getUser.rejected.type]: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    },
+    [changePassword.pending.type]: (state, action) => {
+        state.loading = true;
+    },
+    [changePassword.fulfilled.type]: (state, action) => {
+        state.loading = false;
+        state.changePassword = action.payload;
+    },
+    [changePassword.rejected.type]: (state, action) => {
         state.loading = false;
         state.error = action.payload;
     },

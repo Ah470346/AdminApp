@@ -1,8 +1,10 @@
 import React, { useState, useEffect, ChangeEvent } from 'react';
-import { Modal, Input, Button } from 'antd';
+import { Modal, Input, Button, message } from 'antd';
 import { useForm, useWatch } from 'react-hook-form';
 import { ErrorMessage } from '@hookform/error-message';
-import { FormData } from '../../type';
+import { formData } from '../../type';
+import { changePassword } from '../../redux/user/slice';
+import { useAppDispatch } from '../../hooks';
 
 function ModalChangePassword({
     visible,
@@ -11,12 +13,16 @@ function ModalChangePassword({
     visible: boolean;
     setVisible: any;
 }) {
+    const dispatch = useAppDispatch();
+    const onChangePass = (user: FormData) => dispatch(changePassword(user));
+    const [enable, setEnable] = useState<boolean>(true);
     const {
         register,
         handleSubmit,
         control,
+        setError,
         formState: { errors },
-    } = useForm<FormData>({
+    } = useForm<formData>({
         defaultValues: {
             username: '',
             password: '',
@@ -25,8 +31,55 @@ function ModalChangePassword({
         },
     });
 
-    const onSubmit = (data: FormData) => {
-        console.log(data);
+    const onSubmit = (data: formData) => {
+        const dataPost = new FormData();
+        const modal = document.querySelector<HTMLElement>('.ant-modal-content');
+        dataPost.append('username', data.username);
+        dataPost.append('password', data.password);
+        dataPost.append('newPassword', data.newPassword);
+        if (data.newPassword !== data.confirmPassword) {
+            setError('confirmPassword', {
+                type: 'manual',
+                message: "confirmPassword is't correct",
+            });
+        } else {
+            onChangePass(dataPost)
+                .unwrap()
+                .then((res) => {
+                    if (modal) {
+                        modal.style.pointerEvents = 'none';
+                        setEnable(false);
+                    }
+                    message.loading({
+                        content: 'Loading...',
+                        key: 'success',
+                        duration: 0,
+                    });
+                    setTimeout(() => {
+                        if (res === 'Auth failed') {
+                            message.error({
+                                content: "Username or Password is't correct!!",
+                                key: 'success',
+                                duration: 5,
+                            });
+                            setEnable(true);
+                        } else {
+                            message.success({
+                                content: 'Change Password successful!',
+                                key: 'success',
+                                duration: 5,
+                            });
+                            setVisible(false);
+                        }
+                        if (modal) {
+                            modal.style.pointerEvents = 'auto';
+                        }
+                    }, 2000);
+                })
+                .catch((e) => {
+                    message.error({ content: e, key: 'err', duration: 5 });
+                });
+        }
     };
 
     const Controller = ({ name, register, control, render, rules }: any) => {
@@ -50,7 +103,6 @@ function ModalChangePassword({
     const InputElement = (props: any) => {
         const [value, setValue] = useState(props.value || '');
         useEffect(() => {
-            console.log(props.value);
             setValue(props.value);
         }, [props.value]);
         return (
@@ -84,15 +136,24 @@ function ModalChangePassword({
         );
     };
 
+    const onCancel = (enable: boolean) => {
+        if (enable) {
+            return setVisible(false);
+        } else {
+            return () => {};
+        }
+    };
+
     return (
         <Modal
             title="CHANGE PASSWORD"
             visible={visible}
-            onCancel={() => setVisible(false)}
+            onCancel={() => onCancel(enable)}
             centered
+            className="non-border-top modal"
             footer={false}
         >
-            <section className="wrap-change-pass">
+            <section className="wrap-change-pass" key={visible}>
                 <form onSubmit={handleSubmit(onSubmit)}>
                     <Controller
                         {...{
