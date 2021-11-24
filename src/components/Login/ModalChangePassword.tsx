@@ -32,6 +32,15 @@ function ModalChangePassword({
         },
     });
 
+    const onReset = () => {
+        reset({
+            username: '',
+            password: '',
+            newPassword: '',
+            confirmPassword: '',
+        });
+    };
+
     const onSubmit = (data: formData) => {
         const dataPost = new FormData();
         const modal = document.querySelector<HTMLElement>('.ant-modal-content');
@@ -44,6 +53,11 @@ function ModalChangePassword({
                 message: "confirmPassword is't correct",
             });
         } else {
+            message.loading({
+                content: 'Loading...',
+                key: 'changePass',
+                duration: 0,
+            });
             onChangePass(dataPost)
                 .unwrap()
                 .then((res) => {
@@ -51,31 +65,22 @@ function ModalChangePassword({
                         modal.style.pointerEvents = 'none';
                         setEnable(false);
                     }
-                    message.loading({
-                        content: 'Loading...',
-                        key: 'success',
-                        duration: 0,
-                    });
                     setTimeout(() => {
                         if (res === 'Auth failed') {
                             message.error({
                                 content: "Username or Password is't correct!!",
-                                key: 'success',
+                                key: 'changePass',
                                 duration: 5,
                             });
                             setEnable(true);
+                            onReset();
                         } else {
                             message.success({
                                 content: 'Change Password successful!',
-                                key: 'success',
+                                key: 'changePass',
                                 duration: 5,
                             });
-                            reset({
-                                username: '',
-                                password: '',
-                                newPassword: '',
-                                confirmPassword: '',
-                            });
+                            onReset();
                             setVisible(false);
                         }
                         if (modal) {
@@ -84,7 +89,11 @@ function ModalChangePassword({
                     }, 2000);
                 })
                 .catch((e) => {
-                    message.error({ content: e, key: 'err', duration: 5 });
+                    message.error({
+                        content: e,
+                        key: 'changePass',
+                        duration: 5,
+                    });
                 });
         }
     };
@@ -119,8 +128,8 @@ function ModalChangePassword({
                 size="large"
                 type={props.type && props.type}
                 onChange={(e) => {
-                    setValue(e.target.value);
                     props.onChange(e);
+                    setValue(e.target.value);
                 }}
                 value={value}
             ></Input>
@@ -156,12 +165,7 @@ function ModalChangePassword({
             title="CHANGE PASSWORD"
             visible={visible}
             onCancel={() => {
-                reset({
-                    username: '',
-                    password: '',
-                    newPassword: '',
-                    confirmPassword: '',
-                });
+                onReset();
                 onCancel(enable);
             }}
             centered

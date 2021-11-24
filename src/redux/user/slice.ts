@@ -59,12 +59,10 @@ export const changePassword = createAsyncThunk(
             const response: any = await getUserApi.changePassword(user);
             return response.message;
         } catch (err: any) {
-            console.log(err);
-
             if (err.response.status === 500) {
                 return rejectWithValue('Server is disconnected!');
             } else {
-                return rejectWithValue(err.response.data.message);
+                return rejectWithValue('Server Error !');
             }
             // Use `err.response.data` as `action.payload` for a `rejected` action,
             // by explicitly returning it using the `rejectWithValue()` utility
