@@ -94,6 +94,7 @@ function ModalChangePassword({
                         key: 'changePass',
                         duration: 5,
                     });
+                    onReset();
                 });
         }
     };
