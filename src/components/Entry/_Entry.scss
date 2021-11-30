@@ -80,7 +80,6 @@
                 padding: 9px 20px;
                 font-weight: bold;
                 font-size: 1.1em;
-                @include flexBox(row, flex-start, center);
 
                 p {
                     margin: 0;

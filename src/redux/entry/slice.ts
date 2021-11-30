@@ -26,6 +26,7 @@ export const getEntry = createAsyncThunk(
             const response = await entryApi.getImage(token);
             return response;
         } catch (err: any) {
+            console.log(err.response.data.message);
             if (err.response.status === 401) {
                 const response = await checkToken(true);
                 if (response === 'Done') {
@@ -62,9 +63,9 @@ export const postEntry = createAsyncThunk(
     ) => {
         try {
             const response = await entryApi.submit(data, token);
-
             return response;
         } catch (err: any) {
+            console.log(err.response.data.message);
             if (err.response.status === 401) {
                 const response = await checkToken(true);
                 if (response.status === 'Done') {
@@ -98,7 +99,6 @@ export const returnImage = createAsyncThunk(
     async (data: FormData, { rejectWithValue }) => {
         try {
             const response = await entryApi.return_image(data);
-
             return response;
         } catch (err: any) {
             // Use `err.response.data` as `action.payload` for a `rejected` action,
@@ -136,6 +136,7 @@ const entryReducer = createReducer(initialState, {
     },
     [returnImage.fulfilled.type]: (state, action) => {
         state.loading = false;
+        state.data = {};
         state.returnImageStatus = action.payload;
     },
     [returnImage.rejected.type]: (state, action) => {

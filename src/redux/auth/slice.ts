@@ -23,6 +23,7 @@ export const postAuth = createAsyncThunk(
             const response = await authApi.login(user);
             return response;
         } catch (err: any) {
+            console.log(err.response.data.message);
             // Use `err.response.data` as `action.payload` for a `rejected` action,
             // by explicitly returning it using the `rejectWithValue()` utility
             return rejectWithValue(err.response.data.message);

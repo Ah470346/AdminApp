@@ -1,4 +1,9 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, {
+    useEffect,
+    useState,
+    useLayoutEffect,
+    KeyboardEvent,
+} from 'react';
 import { message, notification } from 'antd';
 import { Input, Button } from 'antd';
 import { getEntry, postEntry, returnImage } from '../../redux/entry/slice';
@@ -7,6 +12,7 @@ import { useAppDispatch } from '../../hooks';
 import { refresh } from '../../type';
 import Cookies from 'universal-cookie';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
+import { Modal } from 'antd';
 
 const { TextArea } = Input;
 
@@ -28,6 +34,7 @@ function Entry(props: any) {
     const onPersist = (persist: boolean) => dispatch(setPersist(persist));
     const [empty, setEmpty] = useState<boolean>(false);
     const [time, setTime] = useState<number>(0);
+    const [show, setShow] = useState<boolean>(false);
 
     const [entry, setEntry] = useState<entry>({
         field_name: '',
@@ -36,7 +43,7 @@ function Entry(props: any) {
         fieldId: 0,
         tableform: '',
     });
-    const onSubmit = () => {
+    const onSubmit = (submitEmpty?: boolean) => {
         const text = document.querySelector<HTMLInputElement>('.text');
         if (empty === true) {
             notification.error({
@@ -44,16 +51,12 @@ function Entry(props: any) {
                 description: "Don't submit when batch is empty!",
                 duration: 5,
             });
-        } else if (!text?.value || text?.value === '') {
-            notification.error({
-                message: 'Error',
-                description: "Entry is don't empty!",
-                duration: 5,
-            });
         } else if (
             text?.value.split('+').length !==
-            entry.field_name.slice(entry.field_name.indexOf('(')).split('+')
-                .length
+                entry.field_name.slice(entry.field_name.indexOf('(')).split('+')
+                    .length &&
+            submitEmpty !== true &&
+            text?.value !== ''
         ) {
             notification.error({
                 message: 'Error',
@@ -61,7 +64,7 @@ function Entry(props: any) {
                     'Plus character Input must equals plus character Name!',
                 duration: 5,
             });
-        } else {
+        } else if (text) {
             const formDataEntry = new FormData();
             const date = new Date();
             formDataEntry.append('imageId', entry.imageId.toString());
@@ -81,13 +84,32 @@ function Entry(props: any) {
                         duration: 5,
                     });
                     refreshImage();
-                    text.value = '';
                 })
                 .catch((err) => {
                     refreshImage();
-                    text.value = '';
                     message.error({ content: err, key: 'err', duration: 5 });
                 });
+        }
+    };
+
+    const onSubmitEnter = (e: KeyboardEvent<HTMLTextAreaElement>) => {
+        const text = document.querySelector<HTMLInputElement>('.text');
+
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            if (text && text.value === '') {
+                if (empty === true) {
+                    notification.error({
+                        message: 'Error',
+                        description: "Don't submit when batch is empty!",
+                        duration: 5,
+                    });
+                } else {
+                    setShow(true);
+                }
+            } else {
+                onSubmit();
+            }
         }
     };
     const return_image = () => {
@@ -106,6 +128,8 @@ function Entry(props: any) {
             .unwrap()
             .then((res: any) => {
                 if (res.message === 'Batch Empty') {
+                    console.log(res.message);
+
                     setEmpty(true);
                     message.warning({
                         content: 'The batch is out',
@@ -137,11 +161,15 @@ function Entry(props: any) {
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     useEffect(() => {
+        const text = document.querySelector<HTMLInputElement>('.text');
+        if (text) {
+            text.value = '';
+        }
+    });
+
+    useLayoutEffect(() => {
         if (entry.imageId !== 0) {
             window.onbeforeunload = () => {
-                return_image();
-            };
-            return () => {
                 return_image();
             };
         }
@@ -195,7 +223,7 @@ function Entry(props: any) {
                     <div className="title">
                         <p>
                             Name:{' '}
-                            {entry.field_name ? (
+                            {empty !== true && entry.field_name ? (
                                 <span className="name">
                                     {entry?.field_name}
                                 </span>
@@ -208,14 +236,28 @@ function Entry(props: any) {
                         className="text"
                         autoSize={true}
                         placeholder="Enter text..."
+                        onKeyPress={(e) => onSubmitEnter(e)}
                     ></TextArea>
                     <div className="submit">
-                        <Button onClick={onSubmit} type="primary">
+                        <Button onClick={() => onSubmit()} type="primary">
                             SUBMIT
                         </Button>
                     </div>
                 </div>
             </div>
+            <Modal
+                title="Confirm"
+                visible={show}
+                className="modal-empty"
+                onCancel={() => setShow(false)}
+                onOk={() => {
+                    onSubmit(true);
+                    setShow(false);
+                }}
+                centered
+            >
+                Do you want submit when textbox is empty?
+            </Modal>
         </div>
     );
 }
