@@ -3,7 +3,6 @@ import { Button, Input, Modal, Space, Table } from 'antd';
 import React from 'react';
 import Highlighter from 'react-highlight-words';
 import { ReactComponent as Lock } from '../../assets/lock.svg';
-import { ReactComponent as Key } from '../../assets/unlock.svg';
 interface Props {
     scroll: number;
 }
@@ -14,6 +13,7 @@ const data = [
         id: '1',
         name: 'truong123',
         email: 'truongdtct1230@gmail.com',
+        date: '06/12/2021',
         code: '123',
         status: (
             <div className="status">
@@ -21,19 +21,20 @@ const data = [
                 <p>Chưa Cấp Quyền</p>
             </div>
         ),
-        action: (
-            <div className="action">
-                <button className="btn enable">
-                    <Key></Key>
-                </button>
-            </div>
-        ),
+        // action: (
+        //     <div className="action">
+        //         <button className="btn enable">
+        //             <Key></Key>
+        //         </button>
+        //     </div>
+        // ),
     },
     {
         key: '2',
         id: '2',
         name: 'truong123',
         email: 'truongdtct1230@gmail.com',
+        date: '06/12/2021',
         code: '123',
         status: (
             <div className="status">
@@ -41,31 +42,25 @@ const data = [
                 <p>Chưa Cấp Quyền</p>
             </div>
         ),
-        action: (
-            <div className="action">
-                <button className="btn enable">
-                    <Key></Key>
-                </button>
-            </div>
-        ),
+        // action: (
+        //     <div className="action">
+        //         <button className="btn enable">
+        //             <Key></Key>
+        //         </button>
+        //     </div>
+        // ),
     },
     {
         key: '3',
         id: '3',
         name: 'truong123',
         email: 'truongdtct1230@gmail.com',
+        date: '06/12/2021',
         code: '123',
         status: (
             <div className="status">
                 <span className="dot green"></span>
                 <p>Đã Cấp Quyền</p>
-            </div>
-        ),
-        action: (
-            <div className="action">
-                <button className="btn disable">
-                    <Lock></Lock>
-                </button>
             </div>
         ),
     },
@@ -191,24 +186,27 @@ export class TableContent extends React.Component<Props> {
                 title: '#',
                 dataIndex: 'id',
                 key: 'id',
-                ...this.getColumnSearchProps('name'),
+                width: '6%',
             },
             {
                 title: 'Tên Đăng Nhập',
                 dataIndex: 'name',
                 key: 'name',
+                width: '15%',
                 ...this.getColumnSearchProps('name'),
             },
             {
                 title: 'Email',
                 dataIndex: 'email',
                 key: 'email',
+                width: '20%',
                 ...this.getColumnSearchProps('email'),
             },
             {
                 title: 'Mã',
                 dataIndex: 'code',
                 key: 'code',
+                width: '12%',
                 ...this.getColumnSearchProps('code'),
             },
             {
@@ -219,6 +217,7 @@ export class TableContent extends React.Component<Props> {
                     { text: 'Đã Cấp Quyền', value: 'Đã' },
                     { text: 'Chưa Cấp Quyền', value: 'Chưa' },
                 ],
+                width: '15%',
                 onFilter: (value: any, record: any) => {
                     return (
                         record.status.props.children[1].props.children.indexOf(
@@ -228,9 +227,29 @@ export class TableContent extends React.Component<Props> {
                 },
             },
             {
+                title: 'Ngày Tạo',
+                dataIndex: 'date',
+                key: 'date',
+                width: '12%',
+                ...this.getColumnSearchProps('date'),
+            },
+            {
                 title: '',
                 dataIndex: 'action',
                 key: 'action',
+                width: '10%',
+                render: () => {
+                    return (
+                        <div className="action">
+                            <button
+                                onClick={() => this.setState({ visible: true })}
+                                className="btn disable"
+                            >
+                                <Lock></Lock>
+                            </button>
+                        </div>
+                    );
+                },
             },
         ];
         return (
@@ -242,7 +261,11 @@ export class TableContent extends React.Component<Props> {
                     pagination={false}
                     scroll={{ y: this.props.scroll }}
                 />
-                <Modal visible={this.state.visible}></Modal>
+                <Modal
+                    visible={this.state.visible}
+                    onCancel={() => this.setState({ visible: false })}
+                    centered
+                ></Modal>
             </>
         );
     }

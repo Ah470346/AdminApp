@@ -13,8 +13,6 @@ const socket = io('http://192.168.0.24:5656');
 function Home() {
     const [scroll, setScroll] = useState<number>(0);
 
-    const onSearch = (value: any) => console.log(value);
-
     useEffect(() => {
         const wrap_table = document.querySelector<HTMLElement>('.wrap-table');
         const table = document.querySelector<HTMLElement>('.table');
@@ -35,7 +33,12 @@ function Home() {
     return (
         <section className="wrap-home">
             <Row style={{ height: '100%' }}>
-                <Col span={4} className="slide-menu">
+                <Col
+                    span={4}
+                    xl={{ span: 4 }}
+                    lg={{ span: 5 }}
+                    className="slide-menu"
+                >
                     <div className="header">
                         <Link
                             onClick={() => {
@@ -49,12 +52,17 @@ function Home() {
                     <div className="menu">
                         <ul>
                             <li>
-                                <User></User> Danh Sách Thành Viên
+                                <User></User> Danh Sách Users
                             </li>
                         </ul>
                     </div>
                 </Col>
-                <Col span={20} className="content">
+                <Col
+                    span={20}
+                    xl={{ span: 20 }}
+                    lg={{ span: 19 }}
+                    className="content"
+                >
                     <div className="header">
                         <div className="left"></div>
                         <div className="right">
@@ -66,14 +74,6 @@ function Home() {
                         <div className="table">
                             <div className="table-header">
                                 <p className="title">Danh Sách Thành Viên</p>
-                                <Search
-                                    placeholder="Mã..."
-                                    allowClear
-                                    enterButton
-                                    className="search"
-                                    size="large"
-                                    onSearch={onSearch}
-                                />
                             </div>
                             <div className="table-contain">
                                 <TableContent scroll={scroll}></TableContent>
