@@ -1,11 +1,10 @@
-import React, { FormEvent, useState } from 'react';
-import ModalChangePassword from './ModalChangePassword';
-import { useAppDispatch } from '../../hooks';
-import { setPersist, setPage } from '../../redux/persistLogin/slice';
-import { postAuth } from '../../redux/auth/slice';
-import { useHistory } from 'react-router-dom';
 import { message, notification } from 'antd';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import Cookies from 'universal-cookie/es6';
+import { useAppDispatch } from '../../hooks';
+import { postAuth } from '../../redux/auth/slice';
+import { setPage, setPersist } from '../../redux/persistLogin/slice';
 
 function Login(props: any) {
     const cookie = new Cookies();
@@ -14,7 +13,6 @@ function Login(props: any) {
     const setPersistCookie = (status: boolean) => dispatch(setPersist(status));
     const onPage = (page: string) => dispatch(setPage(page));
     const onLogin = (user: FormData) => dispatch(postAuth(user));
-    const [visible, setVisible] = useState<boolean>(false);
     const login = (e: any) => {
         e.preventDefault();
         const data = new FormData(e.target);
@@ -100,9 +98,6 @@ function Login(props: any) {
                     <button type="submit" id="login-button">
                         Login
                     </button>
-                    <p className="change-pass" onClick={() => setVisible(true)}>
-                        Change Password
-                    </p>
                 </form>
             </div>
 
@@ -118,10 +113,6 @@ function Login(props: any) {
                 <li></li>
                 <li></li>
             </ul>
-            <ModalChangePassword
-                visible={visible}
-                setVisible={setVisible}
-            ></ModalChangePassword>
         </div>
     );
 }

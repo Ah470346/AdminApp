@@ -1,12 +1,10 @@
-import React, { useState, useEffect } from 'react';
-import LoginPage from './Login/Login';
-import InfoPage from './InfoPage/Information';
-import Header from './Header';
-import Entry from './Entry/Entry';
-import { Route, Switch, Redirect, useLocation, useHistory } from 'react-router';
-import { Spin } from 'antd';
-import { useAppSelector, useAppDispatch } from '../hooks';
 import { LoadingOutlined } from '@ant-design/icons';
+import { Spin } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Route, Switch, useHistory, useLocation } from 'react-router';
+import { useAppDispatch, useAppSelector } from '../hooks';
+import Home from './Home/Home';
+import LoginPage from './Login/Login';
 
 const antIcon = <LoadingOutlined style={{ fontSize: 24 }} spin />;
 
@@ -32,42 +30,33 @@ function Main() {
                     <Route exact path="/">
                         <LoginPage></LoginPage>
                     </Route>
-                    <ProtectHome path="/information" persist={persist}>
-                        <>
-                            <Header></Header>
-                            <InfoPage></InfoPage>
-                        </>
-                    </ProtectHome>
-                    <ProtectHome path="/entry" persist={persist}>
-                        <>
-                            <Header></Header>
-                            <Entry></Entry>
-                        </>
-                    </ProtectHome>
+                    <Route exact path="/home">
+                        <Home></Home>
+                    </Route>
                 </Switch>
             </div>
         </Spin>
     );
 }
 
-const ProtectHome = ({
-    children,
-    path,
-    persist,
-}: {
-    children: JSX.Element;
-    path: string;
-    persist: boolean | undefined;
-}) => {
-    return (
-        <Route
-            exact
-            path={path}
-            render={() =>
-                persist === true ? children : <Redirect to="/"></Redirect>
-            }
-        />
-    );
-};
+// const ProtectHome = ({
+//     children,
+//     path,
+//     persist,
+// }: {
+//     children: JSX.Element;
+//     path: string;
+//     persist: boolean | undefined;
+// }) => {
+//     return (
+//         <Route
+//             exact
+//             path={path}
+//             render={() =>
+//                 persist === true ? children : <Redirect to="/"></Redirect>
+//             }
+//         />
+//     );
+// };
 
 export default Main;

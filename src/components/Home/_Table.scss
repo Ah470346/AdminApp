@@ -1,0 +1,67 @@
+.table-detail {
+    font-weight: 500;
+    border: 1px solid rgba($color: #000000, $alpha: 0.1);
+    table td,
+    table th {
+        font-size: 1.1em;
+    }
+
+    table th {
+        font-weight: 600;
+    }
+
+    table {
+        tbody {
+            .ant-table-cell {
+                padding: 12px 16px 12px 16px;
+            }
+        }
+        .status {
+            @include flexBox(row, flex-start, center);
+
+            span {
+                width: 15px;
+                height: 15px;
+                border-radius: 7px;
+                margin-right: 10px;
+                box-shadow: 0px 0px 3px rgba($color: #000000, $alpha: 0.5);
+            }
+            .green {
+                background: $backgroundGreen;
+            }
+            .red {
+                background: $backgroundRed;
+            }
+        }
+        .action {
+            @include flexBox(row, center, center);
+            .btn {
+                width: 40px;
+                height: 34px;
+                border-radius: 3px;
+                border: none;
+                outline: none;
+                opacity: 1;
+                transition: all ease 0.2s;
+                color: white;
+                @include flexBox(row, center, center);
+
+                svg {
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+            .enable {
+                background-color: $colorBlueAnt;
+            }
+
+            .disable {
+                background-color: #ff4d4f;
+            }
+
+            .btn:hover {
+                opacity: 0.7;
+            }
+        }
+    }
+}

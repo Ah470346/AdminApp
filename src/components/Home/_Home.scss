@@ -1,0 +1,116 @@
+.wrap-home {
+    width: 100vw;
+    height: 100vh;
+
+    .slide-menu {
+        height: 100%;
+        background: #50a3a2;
+        color: white;
+        font-size: 1em;
+        font-weight: 650;
+        border: 1px solid rgba($color: #fff, $alpha: 0.5);
+        .header {
+            height: 65px;
+            border-bottom: 1px solid rgba($color: #fff, $alpha: 0.5);
+            @include flexBox(row, center, center);
+
+            a {
+                font-size: 1.8em;
+                color: white;
+            }
+        }
+
+        .menu {
+            font-family: 'Courier New', Courier, monospace;
+            padding: 20px 10px 20px 10px;
+            ul,
+            li {
+                margin: 0;
+                list-style: none;
+            }
+
+            li {
+                cursor: pointer;
+                word-spacing: 0px;
+                font-weight: 600;
+                padding: 15px 10px 15px 10px;
+                font-size: 1em;
+                transition: all ease 0.2s;
+                @include flexBox(row, flex-start, flex-end);
+                svg {
+                    transition: all ease 0.2s;
+                    width: 22px;
+                    height: 22px;
+                    margin-right: 15px;
+                }
+            }
+
+            li:hover {
+                background-color: $colorBlueAnt;
+            }
+        }
+    }
+
+    .content {
+        height: 100%;
+        background-color: rgb(243, 245, 245);
+        color: black;
+        font-size: 1em;
+        font-weight: 600;
+
+        .header {
+            height: 65px;
+            padding: 5px;
+            box-shadow: 0px 1px 3px rgba($color: #000000, $alpha: 0.1);
+            background-color: #fff;
+            @include flexBox(row, space-between, center);
+            padding: 0px 30px 0px 20px;
+
+            .right {
+                cursor: pointer;
+                font-size: 1.1em;
+                opacity: 1;
+                transition: all ease 0.2s;
+                img {
+                    width: 22px;
+                    height: 22px;
+                    margin-right: 7px;
+                }
+            }
+
+            .right:hover {
+                opacity: 0.5;
+            }
+        }
+
+        .wrap-table {
+            padding: 20px;
+
+            .table {
+                width: 100%;
+                height: 100%;
+                background-color: #fff;
+                box-shadow: 0px 1px 5px rgba($color: #000000, $alpha: 0.1);
+
+                .table-header {
+                    padding: 0px 20px;
+                    height: 65px;
+                    @include flexBox(row, space-between, center);
+
+                    p {
+                        font-size: 1.3em;
+                    }
+
+                    .search {
+                        width: 250px;
+                    }
+                }
+
+                & > .table-contain {
+                    padding: 20px 20px 20px 20px;
+                }
+            }
+        }
+    }
+}
+@import './Table';

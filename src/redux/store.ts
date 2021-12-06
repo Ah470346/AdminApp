@@ -1,6 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
 import AuthReducer from './auth/slice';
-import entryReducer from './entry/slice';
 import PersistReducer from './persistLogin/slice';
 import userReducer from './user/slice';
 
@@ -8,7 +7,6 @@ const reducer = {
     auth: AuthReducer,
     persist: PersistReducer,
     user: userReducer,
-    entry: entryReducer,
 };
 
 export const store = configureStore({ reducer });
