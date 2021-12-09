@@ -57,13 +57,17 @@ body {
         }
     }
 
-    .ant-notification-notice-content {
+    .ant-notification-notice-message {
         color: black;
-        font-weight: 600 !important;
+        font-weight: 600;
     }
 
     .ant-spin.ant-spin-spinning {
         max-height: 100%;
+    }
+
+    .ant-modal-confirm-title {
+        font-weight: 600 !important;
     }
 }
 

@@ -45,11 +45,15 @@
                 transition: all ease 0.2s;
                 color: white;
                 @include flexBox(row, center, center);
+                margin-right: 3px;
 
                 svg {
                     width: 15px;
                     height: 15px;
                 }
+            }
+            .brow {
+                background-color: #616060;
             }
             .enable {
                 background-color: $colorBlueAnt;

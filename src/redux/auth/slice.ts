@@ -1,4 +1,4 @@
-import { createReducer, createAsyncThunk } from '@reduxjs/toolkit';
+import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import authApi from '../../api/authApi';
 
 // Define the initial state using that type

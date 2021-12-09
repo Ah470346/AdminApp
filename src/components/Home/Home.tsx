@@ -1,17 +1,39 @@
-import { Col, Input, Row } from 'antd';
+import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { io } from 'socket.io-client';
+import { Socket } from 'socket.io-client';
+import Cookies from 'universal-cookie/es6';
+import { ReactComponent as Analysis } from '../../assets/analysis.svg';
+import { ReactComponent as LinkList } from '../../assets/link.svg';
 import Logout from '../../assets/logout.png';
 import { ReactComponent as User } from '../../assets/user.svg';
+import { useAppDispatch } from '../../hooks';
+import { setPersist } from '../../redux/persistLogin/slice';
+import { DataTable, DataTableLink } from '../Main';
+import LinkView from './linkComponent/LinkView';
 import { TableContent } from './Table';
+import { Tool } from './toolComponent/Tool';
 
-const { Search } = Input;
+interface Props {
+    fetchData: () => void;
+    fetchDataLink: () => void;
+    socket: Socket;
+    dataSource: DataTable[];
+    dataSourceLink: DataTableLink[];
+}
 
-const socket = io('http://192.168.0.24:5656');
-
-function Home() {
+function Home({
+    fetchData,
+    fetchDataLink,
+    socket,
+    dataSource,
+    dataSourceLink,
+}: Props) {
+    const cookie = new Cookies();
+    const dispatch = useAppDispatch();
+    const setPersistCookie = (status: boolean) => dispatch(setPersist(status));
     const [scroll, setScroll] = useState<number>(0);
+    const [page, setPage] = useState('User');
 
     useEffect(() => {
         const wrap_table = document.querySelector<HTMLElement>('.wrap-table');
@@ -26,9 +48,12 @@ function Home() {
             table_contain.style.height = `${table.offsetHeight - 65}px`;
             setScroll(table.offsetHeight - th.offsetHeight - 105);
         }
-        // socket.on('event-users', (socket) => {
-        //     console.log(socket);
-        // });
+        socket.on('event-users', (socket) => {
+            if (socket === 'Events') {
+                fetchData();
+                fetchDataLink();
+            }
+        });
     }, []);
     return (
         <section className="wrap-home">
@@ -51,8 +76,23 @@ function Home() {
                     </div>
                     <div className="menu">
                         <ul>
-                            <li>
+                            <li
+                                onClick={() => setPage('User')}
+                                className={`${page === 'User' && 'active'}`}
+                            >
                                 <User></User> Danh Sách Users
+                            </li>
+                            <li
+                                onClick={() => setPage('Tool')}
+                                className={`${page === 'Tool' && 'active'}`}
+                            >
+                                <Analysis></Analysis> Đọc Lệnh
+                            </li>
+                            <li
+                                onClick={() => setPage('Link')}
+                                className={`${page === 'Link' && 'active'}`}
+                            >
+                                <LinkList></LinkList> Danh Sách Link
                             </li>
                         </ul>
                     </div>
@@ -65,20 +105,41 @@ function Home() {
                 >
                     <div className="header">
                         <div className="left"></div>
-                        <div className="right">
+                        <Link
+                            onClick={() => {
+                                setPersistCookie(false);
+                                cookie.remove('status');
+                            }}
+                            className="right"
+                            to={'/'}
+                        >
                             <img src={Logout} alt="#" />
                             Logout
-                        </div>
+                        </Link>
                     </div>
                     <div className="wrap-table">
-                        <div className="table">
-                            <div className="table-header">
-                                <p className="title">Danh Sách Thành Viên</p>
+                        {page === 'User' && (
+                            <div className="table">
+                                <div className="table-header">
+                                    <p className="title">
+                                        Danh Sách Thành Viên
+                                    </p>
+                                </div>
+                                <div className="table-contain">
+                                    <TableContent
+                                        scroll={scroll}
+                                        dataSource={dataSource}
+                                    ></TableContent>
+                                </div>
                             </div>
-                            <div className="table-contain">
-                                <TableContent scroll={scroll}></TableContent>
-                            </div>
-                        </div>
+                        )}
+                        {page === 'Tool' && <Tool socket={socket}></Tool>}
+                        {page === 'Link' && (
+                            <LinkView
+                                socket={socket}
+                                dataSource={dataSourceLink}
+                            ></LinkView>
+                        )}
                     </div>
                 </Col>
             </Row>

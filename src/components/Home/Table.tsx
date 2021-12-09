@@ -1,76 +1,19 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Button, Input, Modal, Space, Table } from 'antd';
+import { Button, Input, Space, Table } from 'antd';
 import React from 'react';
 import Highlighter from 'react-highlight-words';
-import { ReactComponent as Lock } from '../../assets/lock.svg';
+import { DataTable } from '../Main';
+import { Action } from './action';
+
 interface Props {
     scroll: number;
+    dataSource: DataTable[];
 }
-
-const data = [
-    {
-        key: '1',
-        id: '1',
-        name: 'truong123',
-        email: 'truongdtct1230@gmail.com',
-        date: '06/12/2021',
-        code: '123',
-        status: (
-            <div className="status">
-                <span className="dot red"></span>
-                <p>Chưa Cấp Quyền</p>
-            </div>
-        ),
-        // action: (
-        //     <div className="action">
-        //         <button className="btn enable">
-        //             <Key></Key>
-        //         </button>
-        //     </div>
-        // ),
-    },
-    {
-        key: '2',
-        id: '2',
-        name: 'truong123',
-        email: 'truongdtct1230@gmail.com',
-        date: '06/12/2021',
-        code: '123',
-        status: (
-            <div className="status">
-                <span className="dot red"></span>
-                <p>Chưa Cấp Quyền</p>
-            </div>
-        ),
-        // action: (
-        //     <div className="action">
-        //         <button className="btn enable">
-        //             <Key></Key>
-        //         </button>
-        //     </div>
-        // ),
-    },
-    {
-        key: '3',
-        id: '3',
-        name: 'truong123',
-        email: 'truongdtct1230@gmail.com',
-        date: '06/12/2021',
-        code: '123',
-        status: (
-            <div className="status">
-                <span className="dot green"></span>
-                <p>Đã Cấp Quyền</p>
-            </div>
-        ),
-    },
-];
 
 export class TableContent extends React.Component<Props> {
     state = {
         searchText: '',
         searchedColumn: '',
-        visible: false,
     };
 
     searchInput: Input | null = null;
@@ -189,14 +132,14 @@ export class TableContent extends React.Component<Props> {
                 width: '6%',
             },
             {
-                title: 'Tên Đăng Nhập',
+                title: 'Số Điện Thoại',
                 dataIndex: 'name',
                 key: 'name',
                 width: '15%',
                 ...this.getColumnSearchProps('name'),
             },
             {
-                title: 'Email',
+                title: 'Tên Thành Viên',
                 dataIndex: 'email',
                 key: 'email',
                 width: '20%',
@@ -219,10 +162,19 @@ export class TableContent extends React.Component<Props> {
                 ],
                 width: '15%',
                 onFilter: (value: any, record: any) => {
+                    return record.status.indexOf(value) === 0;
+                },
+                render: (text: string, record: any, index: any) => {
+                    const status = record.status;
                     return (
-                        record.status.props.children[1].props.children.indexOf(
-                            value
-                        ) === 0
+                        <div className="status">
+                            <span
+                                className={`dot ${
+                                    status === 'Đã cấp quyền' ? 'green' : 'red'
+                                }`}
+                            ></span>
+                            <p>{status}</p>
+                        </div>
                     );
                 },
             },
@@ -230,43 +182,36 @@ export class TableContent extends React.Component<Props> {
                 title: 'Ngày Tạo',
                 dataIndex: 'date',
                 key: 'date',
-                width: '12%',
+                width: '10%',
                 ...this.getColumnSearchProps('date'),
             },
             {
                 title: '',
                 dataIndex: 'action',
                 key: 'action',
-                width: '10%',
-                render: () => {
+                width: '15%',
+                render: (text: string, record: any, index: any) => {
+                    const status = record.status;
+                    const lock = record.lock;
+
                     return (
-                        <div className="action">
-                            <button
-                                onClick={() => this.setState({ visible: true })}
-                                className="btn disable"
-                            >
-                                <Lock></Lock>
-                            </button>
-                        </div>
+                        <Action
+                            id={record.id}
+                            status={status}
+                            lock={lock}
+                        ></Action>
                     );
                 },
             },
         ];
         return (
-            <>
-                <Table
-                    className="table-detail"
-                    columns={columns}
-                    dataSource={data}
-                    pagination={false}
-                    scroll={{ y: this.props.scroll }}
-                />
-                <Modal
-                    visible={this.state.visible}
-                    onCancel={() => this.setState({ visible: false })}
-                    centered
-                ></Modal>
-            </>
+            <Table
+                className="table-detail"
+                columns={columns}
+                dataSource={this.props.dataSource}
+                pagination={false}
+                scroll={{ y: this.props.scroll }}
+            />
         );
     }
 }

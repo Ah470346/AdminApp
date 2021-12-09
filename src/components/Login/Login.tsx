@@ -47,15 +47,15 @@ function Login(props: any) {
                             key: 'login',
                             duration: 5,
                         });
-                        history.push('/information');
+                        history.push('/home');
                     }, 2000);
-                    cookie.set('token', originalPromiseResult.token);
-                    cookie.set(
-                        'refreshToken',
-                        originalPromiseResult.refreshToken
-                    );
-                    cookie.set('status', true);
+                    // cookie.set('token', originalPromiseResult.token);
+                    // cookie.set(
+                    //     'refreshToken',
+                    //     originalPromiseResult.refreshToken
+                    // );
                     onPage('information');
+                    cookie.set('status', true);
                     setPersistCookie(true);
                 })
                 .catch((rejectedValueOrSerializedError: any) => {

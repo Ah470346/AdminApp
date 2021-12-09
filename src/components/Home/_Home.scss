@@ -35,7 +35,7 @@
                 word-spacing: 0px;
                 font-weight: 500;
                 padding: 15px 18px;
-                font-size: 1em;
+                font-size: 17px;
                 transition: all ease 0.2s;
                 @include flexBox(row, flex-start, flex-end);
                 svg {
@@ -47,6 +47,11 @@
             }
 
             li:hover {
+                background-color: $colorBlueAnt;
+            }
+
+            .active {
+                color: #fff !important;
                 background-color: $colorBlueAnt;
             }
         }
@@ -70,6 +75,7 @@
 
             .right {
                 cursor: pointer;
+                color: #000000;
                 font-size: 1em;
                 opacity: 1;
                 transition: all ease 0.2s;
@@ -88,7 +94,8 @@
         .wrap-table {
             padding: 20px;
 
-            .table {
+            .table,
+            .wrap-link {
                 width: 100%;
                 height: 100%;
                 background-color: #fff;
@@ -102,10 +109,6 @@
                     p {
                         font-size: 1.3em;
                     }
-
-                    .search {
-                        width: 250px;
-                    }
                 }
 
                 & > .table-contain {
@@ -116,3 +119,5 @@
     }
 }
 @import './Table';
+@import './toolComponent/Tool';
+@import './linkComponent/LinkView';

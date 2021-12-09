@@ -61,5 +61,6 @@
     },
     "devDependencies": {
         "@types/react-highlight-words": "^0.16.3"
-    }
+    },
+    "proxy": "http://103.166.183.129:5656/v1"
 }
