@@ -16,6 +16,7 @@ export const Tool = ({ socket }: Props) => {
     const [send, setSend] = useState('');
     const [input1, setInput1] = useState('');
     const [input2, setInput2] = useState('');
+
     const style: React.CSSProperties = {
         pointerEvents: `${status.status === 'Off' ? 'none' : 'auto'}`,
         opacity: `${status.status === 'Off' ? '0.5' : '1'}`,

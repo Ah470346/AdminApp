@@ -2,7 +2,7 @@ import { SearchOutlined } from '@ant-design/icons';
 import { Button, Input, Space, Table } from 'antd';
 import React from 'react';
 import Highlighter from 'react-highlight-words';
-import { DataTable } from '../Main';
+import { DataTable } from '../../../type';
 import { Action } from './action';
 
 interface Props {

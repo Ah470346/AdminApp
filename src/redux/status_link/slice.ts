@@ -1,13 +1,14 @@
 import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import linkApi from '../../api/linkApi';
 import statusApi from '../../api/statusApi';
-import { DataLink } from '../../type';
+import { DataLink, DataTableLink } from '../../type';
+import { convertDataLink } from '../../typeFunction';
 
 // Define the initial state using that type
 interface Status {
     loading: boolean;
     data: object;
-    linkData: DataLink[];
+    dataTableLink: DataTableLink[];
     error: null | string;
     notification: string;
 }
@@ -17,14 +18,14 @@ const initialState: Status = {
     data: {},
     error: null,
     notification: '',
-    linkData: [],
+    dataTableLink: [],
 };
 
 export const getStatus = createAsyncThunk(
     'status/getStatus',
     async (status: string, { rejectWithValue }) => {
         try {
-            const response = await statusApi.getStatus();
+            const response: any = await statusApi.getStatus();
             return response;
         } catch (err: any) {
             // Use `err.response.data` as `action.payload` for a `rejected` action,
@@ -52,8 +53,8 @@ export const getAllLink = createAsyncThunk(
     'link/getAllLink',
     async (link: string, { rejectWithValue }) => {
         try {
-            const response = await linkApi.getAll();
-            return response;
+            const response: any = await linkApi.getAll();
+            if (response) return response.links;
         } catch (err: any) {
             // Use `err.response.data` as `action.payload` for a `rejected` action,
             // by explicitly returning it using the `rejectWithValue()` utility
@@ -137,7 +138,7 @@ const statusReducer = createReducer(initialState, {
     },
     [getAllLink.fulfilled.type]: (state, action) => {
         state.loading = false;
-        state.linkData = action.payload;
+        state.dataTableLink = convertDataLink(action.payload);
     },
     [getAllLink.rejected.type]: (state, action) => {
         state.loading = false;

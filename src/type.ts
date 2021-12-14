@@ -3,6 +3,26 @@ import refreshTokenApi from './api/refreshTokenApi';
 
 const cookie = new Cookies();
 
+export interface DataTable {
+    key: string;
+    id: string;
+    name: string;
+    email: string;
+    date: string;
+    code: string;
+    status: string;
+    lock: string;
+}
+
+export interface DataTableLink {
+    key: string;
+    id: string;
+    name: string;
+    role: string;
+    date: string;
+    url: string;
+}
+
 export type DataLock = {
     lock_user: string;
     id: string;

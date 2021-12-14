@@ -17,11 +17,12 @@ import {
     changeLink,
     deleteLink,
 } from '../../../redux/status_link/slice';
-import { DataTableLink } from '../../Main';
+import { DataTableLink } from '../../../type';
 
 interface Props {
     socket: Socket;
     dataSource: DataTableLink[];
+    scroll: number;
 }
 
 interface DefaultValue {
@@ -31,7 +32,7 @@ interface DefaultValue {
 
 const { Option } = Select;
 
-const LinkView = ({ socket, dataSource }: Props) => {
+const LinkView = ({ socket, dataSource, scroll }: Props) => {
     const dispatch = useAppDispatch();
     const [visible, setVisible] = useState(false);
     const [action, setAction] = useState('');
@@ -254,6 +255,7 @@ const LinkView = ({ socket, dataSource }: Props) => {
                     columns={columns}
                     dataSource={dataSource}
                     pagination={false}
+                    scroll={{ y: scroll }}
                 />
             </div>
             <Modal

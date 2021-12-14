@@ -1,18 +1,18 @@
 import { EditOutlined } from '@ant-design/icons';
 import { Input, message, Modal, notification } from 'antd';
 import React, { useState } from 'react';
-import { ReactComponent as Active } from '../../assets/active.svg';
-import { ReactComponent as Inactive } from '../../assets/inactive.svg';
-import { ReactComponent as Lock } from '../../assets/lock.svg';
-import { ReactComponent as Trash } from '../../assets/trash.svg';
-import { ReactComponent as Unlock } from '../../assets/unlock.svg';
-import { useAppDispatch } from '../../hooks';
+import { ReactComponent as Active } from '../../../assets/active.svg';
+import { ReactComponent as Inactive } from '../../../assets/inactive.svg';
+import { ReactComponent as Lock } from '../../../assets/lock.svg';
+import { ReactComponent as Trash } from '../../../assets/trash.svg';
+import { ReactComponent as Unlock } from '../../../assets/unlock.svg';
+import { useAppDispatch } from '../../../hooks';
 import {
     addCode,
     changeLock,
     changeStatus,
     deleteUser,
-} from '../../redux/user/slice';
+} from '../../../redux/user/slice';
 interface Props {
     status: string;
     lock: string;

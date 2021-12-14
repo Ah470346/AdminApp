@@ -1,18 +1,19 @@
 import { createAsyncThunk, createReducer } from '@reduxjs/toolkit';
 import getUserApi from '../../api/getUserApi';
-import { DataCode, DataLock, DataStatus } from '../../type';
+import { DataCode, DataLock, DataStatus, DataTable } from '../../type';
+import { convertData } from '../../typeFunction';
 
 // Define the initial state using that type
 interface user {
     loading: boolean;
-    data: object;
+    dataTableUser: DataTable[];
     error: null | string;
     notification: string;
 }
 
 const initialState: user = {
     loading: false,
-    data: {},
+    dataTableUser: [],
     error: null,
     notification: '',
 };
@@ -21,13 +22,13 @@ export const getUser = createAsyncThunk(
     'user/getUser',
     async (token: string, { rejectWithValue }) => {
         try {
-            const response = await getUserApi.getUser();
-            return response;
+            const response: any = await getUserApi.getUser();
+            if (response) return response.results;
         } catch (err: any) {
             if (err.response.status === 500) {
                 return rejectWithValue('Server is disconnected!');
             } else {
-                return rejectWithValue(err.response.data.message);
+                return rejectWithValue(err.response.data.err);
             }
             // if (err.response.status === 401) {
             //     const response = await checkToken(true);
@@ -127,7 +128,7 @@ const userReducer = createReducer(initialState, {
     },
     [getUser.fulfilled.type]: (state, action) => {
         state.loading = false;
-        state.data = action.payload;
+        state.dataTableUser = convertData(action.payload);
     },
     [getUser.rejected.type]: (state, action) => {
         state.loading = false;

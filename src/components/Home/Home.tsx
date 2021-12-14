@@ -7,31 +7,24 @@ import { ReactComponent as Analysis } from '../../assets/analysis.svg';
 import { ReactComponent as LinkList } from '../../assets/link.svg';
 import Logout from '../../assets/logout.png';
 import { ReactComponent as User } from '../../assets/user.svg';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setPersist } from '../../redux/persistLogin/slice';
-import { DataTable, DataTableLink } from '../Main';
+import { fetchDataLink, fetchDataTable } from '../../typeFunction';
 import LinkView from './linkComponent/LinkView';
-import { TableContent } from './Table';
+import { ListUser } from './listUserComponent/listUser';
 import { Tool } from './toolComponent/Tool';
 
 interface Props {
-    fetchData: () => void;
-    fetchDataLink: () => void;
     socket: Socket;
-    dataSource: DataTable[];
-    dataSourceLink: DataTableLink[];
 }
 
-function Home({
-    fetchData,
-    fetchDataLink,
-    socket,
-    dataSource,
-    dataSourceLink,
-}: Props) {
+function Home({ socket }: Props) {
     const cookie = new Cookies();
     const dispatch = useAppDispatch();
     const setPersistCookie = (status: boolean) => dispatch(setPersist(status));
+    const dataSourceLink = useAppSelector(
+        (state) => state.status.dataTableLink
+    );
     const [scroll, setScroll] = useState<number>(0);
     const [page, setPage] = useState('User');
 
@@ -50,10 +43,10 @@ function Home({
         }
         socket.on('event-users', (socket) => {
             if (socket === 'Events') {
-                fetchData();
-                fetchDataLink();
             }
         });
+        fetchDataLink();
+        fetchDataTable();
     }, []);
     return (
         <section className="wrap-home">
@@ -119,23 +112,12 @@ function Home({
                     </div>
                     <div className="wrap-table">
                         {page === 'User' && (
-                            <div className="table">
-                                <div className="table-header">
-                                    <p className="title">
-                                        Danh Sách Thành Viên
-                                    </p>
-                                </div>
-                                <div className="table-contain">
-                                    <TableContent
-                                        scroll={scroll}
-                                        dataSource={dataSource}
-                                    ></TableContent>
-                                </div>
-                            </div>
+                            <ListUser scroll={scroll}></ListUser>
                         )}
                         {page === 'Tool' && <Tool socket={socket}></Tool>}
                         {page === 'Link' && (
                             <LinkView
+                                scroll={scroll}
                                 socket={socket}
                                 dataSource={dataSourceLink}
                             ></LinkView>
