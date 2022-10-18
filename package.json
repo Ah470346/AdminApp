@@ -36,7 +36,7 @@
         "web-vitals": "^1.1.2"
     },
     "scripts": {
-        "start": "cross-env PORT=3001 react-scripts start",
+        "start": "cross-env PORT=3000 react-scripts start",
         "build": "CI=false && react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject"
@@ -62,5 +62,5 @@
     "devDependencies": {
         "@types/react-highlight-words": "^0.16.3"
     },
-    "proxy": "http://103.166.183.129:5656/"
+    "proxy": "http://116.98.164.61:5656"
 }

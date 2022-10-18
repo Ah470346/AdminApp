@@ -1,11 +1,11 @@
+import 'antd/dist/antd.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import 'antd/dist/antd.css';
+import { Provider } from 'react-redux';
 import App from './App';
+import { store } from './redux/store';
 import reportWebVitals from './reportWebVitals';
 import './styles/style.scss';
-import { store } from './redux/store';
-import { Provider } from 'react-redux';
 
 ReactDOM.render(
     <React.StrictMode>

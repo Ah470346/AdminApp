@@ -1,5 +1,5 @@
-import { Col, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import { Col, Input, message, Modal, Row } from 'antd';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Socket } from 'socket.io-client';
 import Cookies from 'universal-cookie/es6';
@@ -8,6 +8,7 @@ import { ReactComponent as LinkList } from '../../assets/link.svg';
 import Logout from '../../assets/logout.png';
 import { ReactComponent as User } from '../../assets/user.svg';
 import { useAppDispatch, useAppSelector } from '../../hooks';
+import { changePassword } from '../../redux/auth/slice';
 import { setPersist } from '../../redux/persistLogin/slice';
 import { fetchDataLink, fetchDataTable } from '../../typeFunction';
 import LinkView from './linkComponent/LinkView';
@@ -21,12 +22,49 @@ interface Props {
 function Home({ socket }: Props) {
     const cookie = new Cookies();
     const dispatch = useAppDispatch();
+    const [visible, setVisible] = useState(false);
     const setPersistCookie = (status: boolean) => dispatch(setPersist(status));
+    const changePass = (user: FormData) => dispatch(changePassword(user));
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
     const dataSourceLink = useAppSelector(
         (state) => state.status.dataTableLink
     );
     const [scroll, setScroll] = useState<number>(0);
     const [page, setPage] = useState('User');
+
+    const onchangePass = () => {
+        if (username !== '' && password !== '') {
+            message.loading({
+                content: 'Loading...',
+                key: 'change-pass',
+                duration: 0,
+            });
+            const user = new FormData();
+            user.append('username', username);
+            user.append('newpassword', password);
+            changePass(user)
+                .unwrap()
+                .then((res) => {
+                    message.success({
+                        content: 'Change password success!',
+                        key: 'change-pass',
+                        duration: 3,
+                    });
+                    setUsername('');
+                    setPassword('');
+                    setVisible(false);
+                })
+                .catch((err) => {
+                    message.error({
+                        content: 'User is error',
+                        key: 'change-pass',
+                        duration: 3,
+                    });
+                    setPassword('');
+                });
+        }
+    };
 
     useEffect(() => {
         const wrap_table = document.querySelector<HTMLElement>('.wrap-table');
@@ -43,7 +81,12 @@ function Home({ socket }: Props) {
         }
         socket.on('event-users', (socket) => {
             if (socket === 'Events') {
+                fetchDataLink();
+                fetchDataTable();
             }
+        });
+        socket.on('send-command-app', (socket) => {
+            console.log(socket);
         });
         fetchDataLink();
         fetchDataTable();
@@ -64,7 +107,7 @@ function Home({ socket }: Props) {
                             }}
                             to="/home"
                         >
-                            Administrators
+                            Admin
                         </Link>
                     </div>
                     <div className="menu">
@@ -73,7 +116,7 @@ function Home({ socket }: Props) {
                                 onClick={() => setPage('User')}
                                 className={`${page === 'User' && 'active'}`}
                             >
-                                <User></User> Danh Sách Users
+                                <User></User> Thành Viên
                             </li>
                             <li
                                 onClick={() => setPage('Tool')}
@@ -98,6 +141,12 @@ function Home({ socket }: Props) {
                 >
                     <div className="header">
                         <div className="left"></div>
+                        <p
+                            onClick={() => setVisible(true)}
+                            className="change-pass"
+                        >
+                            Change password
+                        </p>
                         <Link
                             onClick={() => {
                                 setPersistCookie(false);
@@ -125,6 +174,36 @@ function Home({ socket }: Props) {
                     </div>
                 </Col>
             </Row>
+            <Modal
+                visible={visible}
+                title="Thay đổi mật khẩu"
+                okText="Cập Nhập"
+                cancelText="Thoát"
+                onCancel={() => {
+                    setUsername('');
+                    setPassword('');
+                    setVisible(false);
+                }}
+                onOk={() => {
+                    onchangePass();
+                }}
+            >
+                <Input
+                    size="large"
+                    className="username"
+                    placeholder="username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                ></Input>
+                <Input
+                    size="large"
+                    className="password"
+                    type="password"
+                    placeholder="new password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                ></Input>
+            </Modal>
         </section>
     );
 }

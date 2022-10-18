@@ -16,8 +16,6 @@ function Login(props: any) {
     const login = (e: any) => {
         e.preventDefault();
         const data = new FormData(e.target);
-        const form = document.querySelector('.container form');
-        const wrapper = document.querySelector('.wrapper');
         const inputUsername =
             document.querySelector<HTMLInputElement>('#username');
         const inputPassword =
@@ -28,11 +26,6 @@ function Login(props: any) {
                 description: 'Username or Password is empty!',
             });
         } else if (inputUsername?.value && inputPassword?.value) {
-            form?.classList.add('form-fade');
-            wrapper?.classList.add('form-success');
-            setTimeout(() => {
-                form?.classList.add('form-hidden');
-            }, 500);
             message.loading({
                 content: 'Loading...',
                 key: 'login',
@@ -68,51 +61,72 @@ function Login(props: any) {
                             key: 'login',
                             duration: 5,
                         });
-                        form?.classList.remove('form-fade');
-                        // form?.classList.remove('form-fade');
-                        wrapper?.classList.remove('form-success');
-                        setTimeout(() => {
-                            form?.classList.remove('form-hidden');
-                        }, 500);
                     }, 2000);
                 });
         }
     };
     return (
-        <div className="wrapper">
-            <div className="container">
-                <h1>Welcome</h1>
-                <form onSubmit={(e) => login(e)} className="form">
-                    <input
-                        id="username"
-                        name="username"
-                        type="text"
-                        placeholder="Username"
-                    />
-                    <input
-                        id="password"
-                        type="password"
-                        placeholder="Password"
-                        name="password"
-                    />
-                    <button type="submit" id="login-button">
-                        Login
-                    </button>
-                </form>
-            </div>
+        <div className="limiter">
+            <div className="container-login100">
+                <div className="wrap-login100">
+                    <div className="login100-pic js-tilt" data-tilt>
+                        <img src="images/img-01.png" alt="IMG" />
+                    </div>
 
-            <ul className="bg-bubbles">
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-                <li></li>
-            </ul>
+                    <form
+                        className="login100-form validate-form"
+                        onSubmit={login}
+                    >
+                        <span className="login100-form-title">
+                            Member Login
+                        </span>
+
+                        <div
+                            className="wrap-input100 validate-input"
+                            data-validate="Valid email is required: ex@abc.xyz"
+                        >
+                            <input
+                                className="input100"
+                                type="text"
+                                name="username"
+                                id="username"
+                                placeholder="Username"
+                            />
+                            <span className="focus-input100"></span>
+                            <span className="symbol-input100">
+                                <i
+                                    className="fa fa-envelope"
+                                    aria-hidden="true"
+                                ></i>
+                            </span>
+                        </div>
+
+                        <div
+                            className="wrap-input100 validate-input"
+                            data-validate="Password is required"
+                        >
+                            <input
+                                className="input100"
+                                type="password"
+                                name="pass"
+                                id="password"
+                                placeholder="Password"
+                            />
+                            <span className="focus-input100"></span>
+                            <span className="symbol-input100">
+                                <i
+                                    className="fa fa-lock"
+                                    aria-hidden="true"
+                                ></i>
+                            </span>
+                        </div>
+
+                        <div className="container-login100-form-btn">
+                            <button className="login100-form-btn">Login</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     );
 }

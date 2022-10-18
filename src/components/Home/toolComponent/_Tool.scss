@@ -25,7 +25,7 @@
 
     .send-action {
         margin-top: 30px;
-        padding: 50px 0 60px 0;
+        padding: 10px 0 20px 0;
         border: 1px dashed rgba($color: $colorBlueAnt, $alpha: 0.3);
         @include flexBox(row, space-around);
 

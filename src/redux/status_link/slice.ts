@@ -8,6 +8,7 @@ import { convertDataLink } from '../../typeFunction';
 interface Status {
     loading: boolean;
     data: object;
+    random: object;
     dataTableLink: DataTableLink[];
     error: null | string;
     notification: string;
@@ -16,6 +17,7 @@ interface Status {
 const initialState: Status = {
     loading: false,
     data: {},
+    random: {},
     error: null,
     notification: '',
     dataTableLink: [],
@@ -28,6 +30,7 @@ export const getStatus = createAsyncThunk(
             const response: any = await statusApi.getStatus();
             return response;
         } catch (err: any) {
+            console.log(err.response.data.message);
             // Use `err.response.data` as `action.payload` for a `rejected` action,
             // by explicitly returning it using the `rejectWithValue()` utility
             return rejectWithValue(err.response.data.err);
@@ -40,6 +43,35 @@ export const changeStatus = createAsyncThunk(
     async (status: string, { rejectWithValue }) => {
         try {
             const response = await statusApi.changeStatus(status);
+            return response;
+        } catch (err: any) {
+            // Use `err.response.data` as `action.payload` for a `rejected` action,
+            // by explicitly returning it using the `rejectWithValue()` utility
+            return rejectWithValue(err.response.data.err);
+        }
+    }
+);
+
+export const getRandomStatus = createAsyncThunk(
+    'status/getRandomStatus',
+    async (status: string, { rejectWithValue }) => {
+        try {
+            const response: any = await statusApi.getRandomStatus();
+            return response;
+        } catch (err: any) {
+            console.log(err.response.data.message);
+            // Use `err.response.data` as `action.payload` for a `rejected` action,
+            // by explicitly returning it using the `rejectWithValue()` utility
+            return rejectWithValue(err.response.data.err);
+        }
+    }
+);
+
+export const changeRandomStatus = createAsyncThunk(
+    'status/changeRandomStatus',
+    async (status: string, { rejectWithValue }) => {
+        try {
+            const response = await statusApi.changeRandomStatus(status);
             return response;
         } catch (err: any) {
             // Use `err.response.data` as `action.payload` for a `rejected` action,
@@ -130,6 +162,28 @@ const statusReducer = createReducer(initialState, {
         state.notification = action.payload;
     },
     [changeStatus.rejected.type]: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    },
+    [getRandomStatus.pending.type]: (state, action) => {
+        state.loading = true;
+    },
+    [getRandomStatus.fulfilled.type]: (state, action) => {
+        state.loading = false;
+        state.random = action.payload;
+    },
+    [getRandomStatus.rejected.type]: (state, action) => {
+        state.loading = false;
+        state.error = action.payload;
+    },
+    [changeRandomStatus.pending.type]: (state, action) => {
+        state.loading = true;
+    },
+    [changeRandomStatus.fulfilled.type]: (state, action) => {
+        state.loading = false;
+        state.notification = action.payload;
+    },
+    [changeRandomStatus.rejected.type]: (state, action) => {
         state.loading = false;
         state.error = action.payload;
     },

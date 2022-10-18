@@ -4,7 +4,7 @@
 
     .slide-menu {
         height: 100%;
-        background: #50a3a2;
+        background: #7050a3;
         color: white;
         font-size: 1em;
         font-weight: 650;
@@ -47,12 +47,17 @@
             }
 
             li:hover {
-                background-color: $colorBlueAnt;
+                background-color: #daa619;
             }
 
             .active {
                 color: #fff !important;
-                background-color: $colorBlueAnt;
+                background-color: #daa619;
+            }
+
+            .status p {
+                font-family: $fontFamily !important;
+                font-weight: 600;
             }
         }
     }
@@ -88,6 +93,15 @@
 
             .right:hover {
                 opacity: 0.5;
+            }
+
+            .change-pass {
+                cursor: pointer;
+                transition: all ease 0.2s;
+            }
+
+            .change-pass:hover {
+                color: $colorBlueAnt;
             }
         }
 

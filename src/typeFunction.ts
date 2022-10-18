@@ -10,6 +10,8 @@ export const fetchDataTable = () => {
         .unwrap()
         .then((res: any) => {})
         .catch((err) => {
+            console.log(err);
+
             message.error({
                 content: 'Server Disconnected',
                 key: 'err',
@@ -24,6 +26,7 @@ export const fetchDataLink = () => {
         .unwrap()
         .then((res: any) => {})
         .catch((err) => {
+            console.log(err);
             message.error({
                 content: 'Server Disconnected',
                 key: 'err',

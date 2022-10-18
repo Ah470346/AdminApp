@@ -26,8 +26,10 @@ export const getUser = createAsyncThunk(
             if (response) return response.results;
         } catch (err: any) {
             if (err.response.status === 500) {
+                console.log(err.response.data.message);
                 return rejectWithValue('Server is disconnected!');
             } else {
+                console.log(err.response.data.message);
                 return rejectWithValue(err.response.data.err);
             }
             // if (err.response.status === 401) {

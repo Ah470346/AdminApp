@@ -6,7 +6,7 @@ import {
     Modal,
     notification,
     Select,
-    Table,
+    Table
 } from 'antd';
 import React, { useState } from 'react';
 import { Socket } from 'socket.io-client';
@@ -15,7 +15,7 @@ import { useAppDispatch } from '../../../hooks';
 import {
     addLink,
     changeLink,
-    deleteLink,
+    deleteLink
 } from '../../../redux/status_link/slice';
 import { DataTableLink } from '../../../type';
 
@@ -161,7 +161,7 @@ const LinkView = ({ socket, dataSource, scroll }: Props) => {
                         })
                         .catch((err) => {
                             message.error({
-                                content: err,
+                                content: err.message,
                                 key: 'delete',
                                 duration: 5,
                             });
